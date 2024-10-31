@@ -1,0 +1,39 @@
+- name: Ensure Python pip is installed
+  package:
+    name: python3-pip
+    state: present
+
+- name: Install Docker SDK for Python
+  pip:
+    name: docker
+    state: present
+
+- name: Create Docker network and configure logging
+  block:
+    - name: Create Docker network
+      docker_network:
+        name: "{{ docker_network_name }}"
+      tags:
+        - docker_network
+
+    - name: Configure Docker daemon with json-file logging
+      template:
+        src: daemon.json.j2
+        dest: /etc/docker/daemon.json
+      notify: Restart Docker
+
+    - name: Ensure Docker is restarted
+      meta: flush_handlers
+
+  always:
+    - name: Ensure Docker service is started and enabled
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+- name: Create daemon.json template
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+  notify: Restart Docker

@@ -1,0 +1,28 @@
+---
+docker_network_name: proxy
+gitea_domain: anakonda.devops.rebrain.srwx.net
+nginx_domain: anakonda.devops.rebrain.srwx.net
+graylog_domain: graylog.anakonda.devops.rebrain.srwx.net
+postgres_password: secure_postgres_password
+gitea_db_name: giteadb
+gitea_db_user: gitea
+gitea_db_password: secure_gitea_db_password
+gitea_db_type: postgres
+gitea_db_host: localhost:5432
+graylog_password_secret: secure_graylog_secret
+graylog_root_password: secure_graylog_root_password
+
+docker_users:
+  - "{{ ansible_user }}"
+docker_install_compose: true
+docker_compose_version: "1.29.2"
+
+
+certbot_auto_renew: true
+certbot_auto_renew_user: ubuntu
+certbot_auto_renew_hour: 3
+certbot_auto_renew_minute: 30
+certbot_admin_email: 13davidoff@gmail.com
+gitea_version: "1.22.0"
+elasticsearch_heap_size: "1g"
+mongodb_port: 27017

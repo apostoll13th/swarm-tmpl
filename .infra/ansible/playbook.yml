@@ -1,0 +1,17 @@
+- hosts: dev
+  vars_files:
+    - vaults/vault.yml
+  become: yes
+  roles:
+    - common
+    - sagar2github.docker
+    - docker_network
+
+- hosts: prod
+  vars_files:
+    - vaults/vault.yml
+  become: yes
+  roles:
+    - common
+    - sagar2github.docker
+    - docker_network

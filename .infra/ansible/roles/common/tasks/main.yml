@@ -1,0 +1,64 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: Install Python 3 and other required packages
+  apt:
+    name:
+      - python3
+      - python3-pip
+      - certbot
+      - python3-certbot-nginx
+      - ufw
+    state: present
+  become: yes
+
+- name: Check Python 3 version
+  command: python3 --version
+  register: python_version
+  changed_when: false
+
+- name: Display Python version
+  debug:
+    var: python_version.stdout
+
+- name: Configure UFW
+  become: yes
+  block:
+    - name: Reset UFW to default state
+      command: ufw --force reset
+
+    - name: Set UFW default policies
+      community.general.ufw:
+        default: "{{ item.policy }}"
+        direction: "{{ item.direction }}"
+      loop:
+        - { policy: deny, direction: incoming }
+        - { policy: allow, direction: outgoing }
+
+    - name: Configure UFW rules
+      community.general.ufw:
+        rule: allow
+        port: "{{ item.port }}"
+        proto: "{{ item.proto }}"
+      loop:
+        - { port: '22', proto: 'tcp' }
+        - { port: '80', proto: 'tcp' }
+        - { port: '443', proto: 'tcp' }
+        - { port: '9100', proto: 'tcp' }
+        - { port: '12201', proto: 'udp' }
+
+    - name: Enable UFW
+      community.general.ufw:
+        state: enabled
+
+    - name: Show UFW status
+      command: ufw status verbose
+      register: ufw_status
+      changed_when: false
+
+    - name: Display UFW status
+      debug:
+        var: ufw_status.stdout_lines

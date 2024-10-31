@@ -1,0 +1,25 @@
+.infra/terraform/ya_service.json
+
+# Ansible files
+/.infra/ansible/inventory.yml
+/.infra/ansible/inventory_ci_cd.yml
+/.infra/ansible/setup_new_ansible_venv.sh
+/.infra/ansible/vault_pass.txt
+/.infra/ansible/ansible.cfg
+
+# Terraform files
+/.infra/terraform/terraform.tfstate
+/.infra/terraform/terraform.tfstate.backup
+/.infra/terraform/terraform.tfvars
+/.infra/terraform/yd_service.json
+/.infra/terraform/.terraform.tfstate.lock.info
+/.infra/terraform/keys
+/.infra/terraform/.terraform*
+
+# VS Code
+/.vscode
+
+# Keys
+/keys/
+
+
